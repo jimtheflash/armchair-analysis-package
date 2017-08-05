@@ -34,7 +34,7 @@ join_team_to_game <- function(TEAM_AUG, GAME) {
               tid.max = max(tid))
   
   # join team to game, then add tid.list
-  team.game <- left_join(x = team.aug, y = game) %>%
+  team.game <- left_join(x = TEAM_AUG, y = GAME) %>%
     left_join(tid.list) %>%
     mutate(home_bool = tname == h,
            playoff_bool = wk > 17,
@@ -48,7 +48,7 @@ join_team_to_game <- function(TEAM_AUG, GAME) {
   
   # engineer some features
   team.game.aug <- team.game %>%
-    left_join(team.aug, by = c("gid" = "gid", "tid_opp" = "tid"), suffix = c("", "_allowed")) %>%
+    left_join(TEAM_AUG, by = c("gid" = "gid", "tid_opp" = "tid"), suffix = c("", "_allowed")) %>%
     select(-ends_with("cumsum_allowed"), -ends_with("cummean_allowed"), -ends_with("seas_allowed"), -ends_with("wk_allowed"), -tid.min, -tid.max) %>%
     mutate(team_pair_id = paste0("(", tm),
            opp = tname_allowed, tname_allowed = NULL,
@@ -60,6 +60,5 @@ join_team_to_game <- function(TEAM_AUG, GAME) {
                    cummean = cummean)) %>%
     mutate_all(funs(lag1 = lag))
   
-  
-  
+  return(team.game.aug)
 }
