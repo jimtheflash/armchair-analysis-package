@@ -1,4 +1,4 @@
-# What happens to WRs with > 50 targets rookie year?
+# What happens to WRs with > 24 targets rookie year?
 
 # get WRs who were rookies in 2000 or later
 player_wr <- filter(player, pos1 == "WR" & start >= 2000)
@@ -23,15 +23,15 @@ rookie_wr_season <- offense_wr %>%
               ungroup(),
             by = c("player" = "player", "season" = "start_year"))
 
-ggplot(data = filter(rookie_wr_season, targets_sum >= 50), 
+ggplot(data = filter(rookie_wr_season, targets_sum >= 24), 
        aes(x = targets_sum, y = targets_n_plus_1)) +
-  geom_point(size = .9, alpha = .8) +
-  geom_smooth(#method = "lm", formula = y ~ poly(x, 2),
+  geom_point(alpha = .8) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 1),
               color = "chartreuse4", alpha = .5,
               fill = "lightgrey") +
-  scale_x_continuous(breaks = seq(40, 160, 40)) +
+  scale_x_continuous(breaks = seq(0, 150, 50)) +
   xlab("Targets, Rookie Season") +
-  scale_y_continuous(breaks = seq(40, 160, 40)) +
+  # scale_y_continuous(breaks = seq(50, 150, 50)) +
   ylab("Targets, Rookie Season + 1") +
   theme_minimal()
   
